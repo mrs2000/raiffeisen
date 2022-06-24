@@ -1,0 +1,23 @@
+{
+    "name": "mrssoft/raiffeisen",
+    "version": "1.0.0",
+    "description": "Component for payment through the payment gateway Raiffeisen",
+    "keywords": ["yii", "payment", "raiffeisen", "qr-code"],
+    "type": "yii2-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Melnikov Ruslan",
+            "email": "mrs2000@inbox.ru"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "yiisoft/yii2": ">=2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "mrssoft\\raiffeisen\\": "src/"
+        }
+    }
+}
