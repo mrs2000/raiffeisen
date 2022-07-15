@@ -24,9 +24,9 @@ class RaifClient extends \yii\base\Component
             'order' => $order->orderNum,
             'amount' => $order->amount,
             'currency' => $order->currency,
-            'additionalInfo' => mb_substr($order->description, 140),
+            'additionalInfo' => mb_substr($order->description, 0, 140),
             'paymentDetails' => mb_substr($order->description, 0, 185),
-            //'redirectUrl' => $order->redirectUrl,
+            'redirectUrl' => $order->redirectUrl,
         ];
 
         if ($qrExpirationDate = $order->qrExpirationDate ?? $this->qrExpirationDate) {

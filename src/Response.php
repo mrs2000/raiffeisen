@@ -5,6 +5,7 @@ namespace mrssoft\raiffeisen;
 class Response
 {
     public const STATE_NEW = 'NEW';
+    public const STATE_PAID = 'PAID';
 
     public string $qrId = '';
     public string $payload = '';
