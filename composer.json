@@ -1,8 +1,13 @@
 {
     "name": "mrssoft/raiffeisen",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Component for payment through the payment gateway Raiffeisen",
-    "keywords": ["yii", "payment", "raiffeisen", "qr-code"],
+    "keywords": [
+        "yii",
+        "payment",
+        "raiffeisen",
+        "qr-code"
+    ],
     "type": "yii2-extension",
     "license": "MIT",
     "authors": [

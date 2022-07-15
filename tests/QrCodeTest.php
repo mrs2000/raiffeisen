@@ -4,6 +4,7 @@ namespace tests;
 
 use mrssoft\raiffeisen\RaifClient;
 use mrssoft\raiffeisen\RaifOrder;
+use mrssoft\raiffeisen\Response;
 
 class QrCodeTest extends \PHPUnit\Framework\TestCase
 {
@@ -28,6 +29,7 @@ class QrCodeTest extends \PHPUnit\Framework\TestCase
             'apiUrl' => 'https://test.ecom.raiffeisen.ru/api',
             'secretKey' => $this->params['secretKey'],
             'sbpMerchantId' => $this->params['sbpMerchantId'],
+            'qrExpirationDate' => '+5m'
         ]);
     }
 
@@ -41,15 +43,21 @@ class QrCodeTest extends \PHPUnit\Framework\TestCase
         return $order;
     }
 
-    public function testRegisterQr()
+    public function testRegisterQrAndGetInfo()
     {
         $order = $this->createOrder();
 
         $response = $this->client->registerQr(RaifClient::QR_DYNAMIC, $order);
 
         $this->assertNotNull($response);
-        $this->assertArrayHasKey('qrId', $response);
-        $this->assertArrayHasKey('payload', $response);
-        $this->assertArrayHasKey('qrUrl', $response);
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertNotEmpty($response->qrId);
+        $this->assertNotEmpty($response->payload);
+        $this->assertNotEmpty($response->qrUrl);
+
+        $response = $this->client->infoQr($response->qrId);
+
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertNotEmpty($response->qrStatus);
     }
 }

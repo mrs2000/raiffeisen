@@ -2,8 +2,6 @@
 
 namespace mrssoft\raiffeisen;
 
-use yii\base\ErrorException;
-
 class RaifClient extends \yii\base\Component
 {
     public const QR_STATIC = 'QRStatic';
@@ -16,29 +14,33 @@ class RaifClient extends \yii\base\Component
 
     public string $apiUrl = 'https://e-commerce.raiffeisen.ru/api';
 
-    public function registerQr(string $qrType, RaifOrder $order): ?array
-    {
-        if (empty($order->orderNum)) {
-            throw new ErrorException('');
-        }
+    public string|null $qrExpirationDate = null;
 
+    public function registerQr(string $qrType, RaifOrder $order): ?Response
+    {
         $params = [
             'qrType' => $qrType,
             'sbpMerchantId' => $this->sbpMerchantId,
             'order' => $order->orderNum,
-            'additionalInfo' => $order->description,
             'amount' => $order->amount,
             'currency' => $order->currency,
-            'paymentDetails' => $order->description,
-            'redirectUrl' => $order->redirectUrl,
+            'additionalInfo' => mb_substr($order->description, 140),
+            'paymentDetails' => mb_substr($order->description, 0, 185),
+            //'redirectUrl' => $order->redirectUrl,
         ];
 
-        return $this->request('POST', '/sbp/v2/qrs', $params);
+        if ($qrExpirationDate = $order->qrExpirationDate ?? $this->qrExpirationDate) {
+            $params['qrExpirationDate'] = $qrExpirationDate;
+        }
+
+        $response = $this->request('POST', '/sbp/v2/qrs', $params);
+        return $response ? new Response($response) : null;
     }
 
-    public function infoQr(string $qrId): ?array
+    public function infoQr(string $qrId): ?Response
     {
-        return $this->request('GET', '/sbp/v2/qrs/' . $qrId);
+        $response = $this->request('GET', '/sbp/v2/qrs/' . $qrId);
+        return $response ? new Response($response) : null;
     }
 
     private function request(string $method, string $endpoint, array $params = null): ?array
